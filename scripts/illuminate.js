@@ -159,6 +159,8 @@ class GlApp {
             //
             // TODO: properly select shader here
             //
+            
+            //let selected_shader = this.algorithm;
             let selected_shader = 'emissive';
             this.gl.useProgram(this.shader[selected_shader].program);
 
