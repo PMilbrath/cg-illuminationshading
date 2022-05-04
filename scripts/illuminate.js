@@ -179,8 +179,9 @@ class GlApp {
             }
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_ambient, this.scene.light.ambient);
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.material_color, this.scene.models[i].material.color);
-            this.gl.uniform3fv(this.shader[selected_shader].uniforms.camera_position, this.scene.camera.position);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.material_specular, this.scene.models[i].material.specular);
             this.gl.uniform1f(this.shader[selected_shader].uniforms.material_shininess, this.scene.models[i].material.shininess);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.camera_position, this.scene.camera.position);
             this.gl.uniformMatrix4fv(this.shader[selected_shader].uniforms.projection_matrix, false, this.projection_matrix);
             this.gl.uniformMatrix4fv(this.shader[selected_shader].uniforms.view_matrix, false, this.view_matrix);
             this.gl.uniformMatrix4fv(this.shader[selected_shader].uniforms.model_matrix, false, this.model_matrix);
