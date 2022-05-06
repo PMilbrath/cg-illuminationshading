@@ -151,11 +151,12 @@ class GlApp {
     render() {
         // delete previous frame (reset both framebuffer and z-buffer)
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        
         // draw all models
         for (let i = 0; i < this.scene.models.length; i ++) {
             if (this.vertex_array[this.scene.models[i].type] == null) continue;
             
+            let lights_colors= new Array(0);
+            let lights_positions= new Array(0);
             
             let selected_shader = this.algorithm + '_' + this.scene.models[i].shader;
             //let selected_shader = 'emissive';
@@ -170,9 +171,9 @@ class GlApp {
             glMatrix.mat4.scale(this.model_matrix, this.model_matrix, this.scene.models[i].size);
 
             //TODO: define light abient, location, color
-            for (let i = 0; i < this.scene.light.point_lights.length; i++) {
-                this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color, this.scene.light.point_lights[i].color);
-                this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position, this.scene.light.point_lights[i].position);
+            for (let i = 0; i < this.scene.light.point_lights.length && i < 10; i++) {
+                lights_colors.push(this.scene.light.point_lights[i].color);
+                lights_positions.push(this.scene.light.point_lights[i].position);
             }
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color, this.scene.light.point_lights[0].color);
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position, this.scene.light.point_lights[0].position);
