@@ -156,11 +156,8 @@ class GlApp {
         for (let i = 0; i < this.scene.models.length; i ++) {
             if (this.vertex_array[this.scene.models[i].type] == null) continue;
             
-            //
-            // TODO: properly select shader here
-            //
             
-            let selected_shader = this.algorithm + '_color';
+            let selected_shader = this.algorithm + '_' + this.scene.models[i].shader;
             //let selected_shader = 'emissive';
             this.gl.useProgram(this.shader[selected_shader].program);
 
@@ -173,10 +170,12 @@ class GlApp {
             glMatrix.mat4.scale(this.model_matrix, this.model_matrix, this.scene.models[i].size);
 
             //TODO: define light abient, location, color
-            for (let i = 0; i < this.scene.light.point_lights.length; i ++) {
+            for (let i = 0; i < this.scene.light.point_lights.length; i++) {
                 this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color, this.scene.light.point_lights[i].color);
                 this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position, this.scene.light.point_lights[i].position);
             }
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color, this.scene.light.point_lights[0].color);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position, this.scene.light.point_lights[0].position);
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_ambient, this.scene.light.ambient);
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.material_color, this.scene.models[i].material.color);
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.material_specular, this.scene.models[i].material.specular);
