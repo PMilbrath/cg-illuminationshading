@@ -57,6 +57,7 @@ function init() {
                     {
                         type: 'cube',
                         shader: 'texture',
+
                         material: {
                             color: vec3.fromValues(1.0, 1.0, 1.0),  // red, green, blue
                             specular: vec3.fromValues(1.0, 1.0, 1.0),  // red, green, blue

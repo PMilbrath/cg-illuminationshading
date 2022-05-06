@@ -140,7 +140,7 @@ class GlApp {
         // 
 
         // download the actual image
-        let image = new Image();
+        let image = new Image(100,100);
         image.crossOrigin = 'anonymous';
         image.addEventListener('load', (event) => {
             // once image is downloaded, update the texture image
@@ -155,15 +155,16 @@ class GlApp {
         //
         // TODO: update image for specified texture
         //
+        console.log(image_element);
         this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
         this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
         this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
         this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
         this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
         //let pixels = [255, 255, 255, 255];
-        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image_element);
+        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array(image_element));
         this.gl.bindTexture(this.gl.TEXTURE_2D, null);
-        this.texture = texture;
+        //this.texture = texture;
     }
 
     render() {
@@ -207,10 +208,11 @@ class GlApp {
             //
             // TODO: bind proper texture and set uniform (if shader is a textured one)
             //
-            console.log(this.shader);
+            //console.log(this.shader);
             if (this.scene.models[i].shader == "texture") {
                 this.gl.activeTexture(this.gl.TEXTURE0);
                 this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+                this.gl.uniform1i(this.shader[selected_shader].uniforms.tex_var,0);
             }
 
             
