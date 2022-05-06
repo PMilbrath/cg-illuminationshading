@@ -37,6 +37,7 @@ class GlApp {
         this.scene = scene;                          // current scene to draw (list of models and lights)
         this.algorithm = 'gouraud';                  // current shading algorithm to use for rendering
 
+        this.texture = null;
 
         // download and compile shaders into GPU program
         let gouraud_color_vs = this.getFile('shaders/gouraud_color.vert');
@@ -128,6 +129,14 @@ class GlApp {
 
         //
         // TODO: set texture parameters and upload a temporary 1px white RGBA array [255,255,255,255]
+        this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.LINEAR);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.REPEAT);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+        let pixels = [0, 255, 255, 255];
+        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, new Uint8Array(pixels));
+        this.gl.bindTexture(this.gl.TEXTURE_2D, null);
         // 
 
         // download the actual image
@@ -138,7 +147,7 @@ class GlApp {
             this.updateTexture(texture, image);
         }, false);
         image.src = image_url;
-
+        
         return texture;
     }
 
@@ -146,6 +155,15 @@ class GlApp {
         //
         // TODO: update image for specified texture
         //
+        this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+        //let pixels = [255, 255, 255, 255];
+        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGBA, 1, 1, 0, this.gl.RGBA, this.gl.UNSIGNED_BYTE, image_element);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+        this.texture = texture;
     }
 
     render() {
@@ -189,11 +207,21 @@ class GlApp {
             //
             // TODO: bind proper texture and set uniform (if shader is a textured one)
             //
+            console.log(this.shader);
+            if (this.scene.models[i].shader == "texture") {
+                this.gl.activeTexture(this.gl.TEXTURE0);
+                this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+            }
 
             
 
             this.gl.bindVertexArray(this.vertex_array[this.scene.models[i].type]);
             this.gl.drawElements(this.gl.TRIANGLES, this.vertex_array[this.scene.models[i].type].face_index_count, this.gl.UNSIGNED_SHORT, 0);
+            
+            if (this.shader == this.algorithm + "_texture") {
+                gl.bindTexture(gl.TEXTURE_2D, null);
+            }
+
             this.gl.bindVertexArray(null);
         }
 
