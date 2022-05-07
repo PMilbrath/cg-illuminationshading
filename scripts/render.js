@@ -64,8 +64,9 @@ function init() {
                             shininess: 32
                         },
                         texture: {
-                            url: 'images/Checkered.jpg' 
-                            //'http://www.textures4photoshop.com/tex/thumbs/water-pool-texture-seamless-and-free-thumb36.jpg'
+                            url: 'images/Checkered.jpg',
+                            scale: vec2.fromValues(1.0, 1.0),
+                            id: null
                         },
                         center: vec3.fromValues(-1.9, 1.0, -6.0), // x, y, z
                         size: vec3.fromValues(1.0, 1.0, 1.0),  // width, height, depth
