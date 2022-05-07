@@ -17,5 +17,16 @@ out vec2 frag_texcoord;
 
 void main() {
     gl_Position = projection_matrix * view_matrix * model_matrix * vec4(vertex_position, 1.0);
+
+    vec3 worldPos = vec3(model_matrix * vec4(vertex_position,1.0));
+
+    mat3 worldModelMat = mat3(model_matrix);
+
+    vec3 worldNorm = vec3(worldModelMat * vertex_normal);
+
+    frag_pos = worldPos;
+
+    frag_normal = worldNorm;
+
     frag_texcoord = vertex_texcoord * texture_scale;
 }
