@@ -179,8 +179,8 @@ class GlApp {
         for (let i = 0; i < this.scene.models.length; i ++) {
             if (this.vertex_array[this.scene.models[i].type] == null) continue;
             
-            let lights_colors= new Array(0);
-            let lights_positions= new Array(0);
+            //let lights_colors= new Array(0);
+            //let lights_positions= new Array(0);
             
             let selected_shader = this.algorithm + '_' + this.scene.models[i].shader;
             //let selected_shader = 'emissive';
@@ -195,12 +195,63 @@ class GlApp {
             glMatrix.mat4.scale(this.model_matrix, this.model_matrix, this.scene.models[i].size);
 
             //TODO: define light abient, location, color
-            for (let j = 0; j < this.scene.light.point_lights.length && j < 10; j++) {
-                lights_colors.push(this.scene.light.point_lights[j].color);
-                lights_positions.push(this.scene.light.point_lights[j].position);
+            let light_colors = [];
+            
+            let light_positions = [];
+            
+
+            //TODO: define light abient, location, color
+            for (let j = 0; j < 10; j++) {
+                //lights_colors.push(this.scene.light.point_lights[j].color);
+                //lights_positions.push(this.scene.light.point_lights[j].position);
+                if(j >= this.scene.light.point_lights.length) {
+                    light_colors.push(this.scene.light.zero_light[0].color);
+                    light_positions.push(this.scene.light.zero_light[0].position);
+                } else {
+                    light_colors.push(this.scene.light.point_lights[j].color);
+                    light_positions.push(this.scene.light.point_lights[j].position);
+                }
+                
+
+                
             }
-            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color, this.scene.light.point_lights[0].color);
-            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position, this.scene.light.point_lights[0].position);
+            light_colors.length = 10;
+            light_positions.length = 10;
+            //console.log(light_colors);
+
+            this.gl.uniform1i(this.shader[selected_shader].uniforms.light_count, this.scene.light.point_lights.length);
+            
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color0, light_colors[0]);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position0, light_positions[0]);
+
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color1, light_colors[1]);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position1, light_positions[1]);
+
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color2, light_colors[2]);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position2, light_positions[2]);
+
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color3, light_colors[3]);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position3, light_positions[3]);
+
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color4, light_colors[4]);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position4, light_positions[4]);
+
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color5, light_colors[5]);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position5, light_positions[5]);
+
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color6, light_colors[6]);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position6, light_positions[6]);
+
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color7, light_colors[7]);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position7, light_positions[7]);
+
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color8, light_colors[8]);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position8, light_positions[8]);
+
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color9, light_colors[9]);
+            this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position9, light_positions[9]);
+            //console.log(light_colors);
+     
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_ambient, this.scene.light.ambient);
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.material_color, this.scene.models[i].material.color);
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.material_specular, this.scene.models[i].material.specular);
@@ -218,7 +269,7 @@ class GlApp {
                 this.gl.uniform2fv(this.shader[selected_shader].uniforms.texture_scale, this.scene.models[i].texture.scale);
                 this.gl.activeTexture(this.gl.TEXTURE0);
                 this.gl.bindTexture(this.gl.TEXTURE_2D, this.scene.models[i].texture.id);
-                console.log(this.scene.models[i]);
+                //console.log(this.scene.models[i]);
                 let sampler_uniform = this.gl.getUniformLocation(this.shader[selected_shader].program, "image");
                 this.gl.uniform1i(sampler_uniform,0);
             }
