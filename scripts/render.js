@@ -74,6 +74,7 @@ function init() {
                         rotate_y: 0,
                         rotate_z: 0
                     }
+                    
                 ],
                 light: {
                     ambient: glMatrix.vec3.fromValues(0.2, 0.2, 0.2),  // red, green, blue

@@ -195,9 +195,9 @@ class GlApp {
             glMatrix.mat4.scale(this.model_matrix, this.model_matrix, this.scene.models[i].size);
 
             //TODO: define light abient, location, color
-            for (let i = 0; i < this.scene.light.point_lights.length && i < 10; i++) {
-                lights_colors.push(this.scene.light.point_lights[i].color);
-                lights_positions.push(this.scene.light.point_lights[i].position);
+            for (let j = 0; j < this.scene.light.point_lights.length && j < 10; j++) {
+                lights_colors.push(this.scene.light.point_lights[j].color);
+                lights_positions.push(this.scene.light.point_lights[j].position);
             }
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_color, this.scene.light.point_lights[0].color);
             this.gl.uniform3fv(this.shader[selected_shader].uniforms.light_position, this.scene.light.point_lights[0].position);
